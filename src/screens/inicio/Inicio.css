@@ -1,0 +1,96 @@
+body {
+    background-color: #222;
+    color: #fff;
+    font-family: sans-serif;
+}
+
+.container {
+    display: flex;  
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px; /* Ajustado para un diseño compacto */
+    height: 80px; /* Altura fija para el encabezado */
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    height: 100%; /* Asegura que el logo esté centrado verticalmente */
+}
+
+.logo img {
+    width: 80px; /* Tamaño del logo */
+    height: auto; /* Mantiene la relación de aspecto */
+}
+
+.menu {
+    display: flex;
+    list-style: none;
+    padding: 0;
+}
+
+.menu li {
+    margin-right: 30px; /* Espaciado entre los botones */
+}
+
+.menu button {
+    color: #fff; /* Color del texto */
+    background-color: rgb(242, 92, 5); /* Color de fondo de los botones */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 10px 20px; /* Espaciado interno */
+    cursor: pointer; /* Cambia el cursor al pasar el mouse */
+    transition: background-color 0.3s ease; /* Transición suave */
+}
+
+.menu button:hover {
+    background-color: rgb(255, 107, 10); /* Color de fondo al pasar el mouse */
+}
+
+.scroll-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgb(242, 92, 5);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.scroll-top:hover {
+    background-color: rgb(255, 107, 10);
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #222;
+}
+
+.footer-logo {
+    width: 60px; /* Tamaño del logo del pie de página */
+    height: auto; /* Mantiene la relación de aspecto */
+}
+.account-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px; /* Espaciado superior */
+}
+
+.account-table th,
+.account-table td {
+    border: 1px solid #fff; /* Borde blanco */
+    padding: 10px;
+    text-align: left;
+}
+
+.account-table th {
+    background-color: #f9a825; /* Color de fondo para el encabezado */
+}
+
+.account-table tr:nth-child(even) {
+    background-color: #333; /* Color de fondo alternado para filas */
+}
