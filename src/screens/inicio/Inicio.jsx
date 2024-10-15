@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import logocorto from '../../assets/logocorto.png'; 
-import './Inicio.css'; // Importa el archivo CSS personalizado
+import './Inicio.css'; 
 
 export default function Inicio() {
     const navigate = useNavigate();
@@ -76,7 +76,7 @@ export default function Inicio() {
                         </tr>
                     </thead>
                     <tbody>
-                        {/* Filas vacías, puedes agregar datos dinámicamente más tarde */}
+                        {}
                         <tr>
                             <td colSpan="3" style={{ textAlign: 'center' }}>No hay datos disponibles</td>
                         </tr>

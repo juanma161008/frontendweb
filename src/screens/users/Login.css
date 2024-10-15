@@ -1,40 +1,68 @@
-/* Login.css */
-
 .login-container {
     display: flex;
+    background-color: rgb(242, 92, 5);
     flex-direction: column;
-    height: 100vh; /* Para que el contenedor ocupe toda la altura de la ventana */
-    justify-content: space-between; /* Espacia el contenido verticalmente */
-    align-items: center; /* Centra horizontalmente el contenido */
+    height: 100vh;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .header {
     display: flex;
-    justify-content: center; /* Centra horizontalmente el logo */
+    justify-content: center;
     width: 100%;
-    padding: 20px; /* Espaciado alrededor del logo */
+    padding: 20px;
 }
 
 .logo {
-    max-width: 100%; /* Asegúrate de que el logo no exceda el ancho del contenedor */
-    height: auto; /* Mantiene la relación de aspecto */
+    max-width: 100%;
+    height: auto;
 }
 
 .login-card {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra los campos de entrada y el botón */
+    align-items: center;
     margin: auto;
+}
+
+.login-card input[type="text"], 
+.login-card input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.login-card button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-card button[type="submit"]:hover {
+    background-color: #3e8e41;
 }
 
 .footer {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra el contenido del pie de página */
-    padding: 20px; /* Espaciado alrededor del pie de página */
+    align-items: center;
+    padding: 20px;
+    background-color: rgb(13, 13, 13);
+    color: white;
 }
 
 .footer-logo {
-    max-width: 100%; /* Asegúrate de que el logo corto no exceda el ancho del contenedor */
-    height: auto; /* Mantiene la relación de aspecto */
+    max-width: 100%;
+    height: auto;
 }

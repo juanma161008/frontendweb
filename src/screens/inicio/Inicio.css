@@ -8,19 +8,19 @@ body {
     display: flex;  
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px; /* Ajustado para un diseño compacto */
-    height: 80px; /* Altura fija para el encabezado */
+    padding: 10px 20px; 
+    height: 80px; 
 }
 
 .logo {
     display: flex;
     align-items: center;
-    height: 100%; /* Asegura que el logo esté centrado verticalmente */
+    height: 100%; 
 }
 
 .logo img {
-    width: 80px; /* Tamaño del logo */
-    height: auto; /* Mantiene la relación de aspecto */
+    width: 80px; 
+    height: auto; 
 }
 
 .menu {
@@ -30,21 +30,21 @@ body {
 }
 
 .menu li {
-    margin-right: 30px; /* Espaciado entre los botones */
+    margin-right: 30px; 
 }
 
 .menu button {
-    color: #fff; /* Color del texto */
-    background-color: rgb(242, 92, 5); /* Color de fondo de los botones */
-    border: none; /* Sin borde */
-    border-radius: 5px; /* Bordes redondeados */
-    padding: 10px 20px; /* Espaciado interno */
-    cursor: pointer; /* Cambia el cursor al pasar el mouse */
-    transition: background-color 0.3s ease; /* Transición suave */
+    color: #fff; 
+    background-color: rgb(242, 92, 5); 
+    border: none; 
+    border-radius: 5px; 
+    padding: 10px 20px; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
 }
 
 .menu button:hover {
-    background-color: rgb(255, 107, 10); /* Color de fondo al pasar el mouse */
+    background-color: rgb(255, 107, 10); 
 }
 
 .scroll-top {
@@ -71,26 +71,26 @@ body {
 }
 
 .footer-logo {
-    width: 60px; /* Tamaño del logo del pie de página */
-    height: auto; /* Mantiene la relación de aspecto */
+    width: 60px; 
+    height: auto; 
 }
 .account-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px; /* Espaciado superior */
+    margin-top: 20px; 
 }
 
 .account-table th,
 .account-table td {
-    border: 1px solid #fff; /* Borde blanco */
+    border: 1px solid #fff; 
     padding: 10px;
     text-align: left;
 }
 
 .account-table th {
-    background-color: #f9a825; /* Color de fondo para el encabezado */
+    background-color: #f9a825; /
 }
 
 .account-table tr:nth-child(even) {
-    background-color: #333; /* Color de fondo alternado para filas */
+    background-color: #333; 
 }
