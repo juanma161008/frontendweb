@@ -10,22 +10,13 @@ export default function Inicio() {
     const [showFooter, setShowFooter] = useState(false);
 
     const toggleScrollTopButton = () => {
-        if (window.scrollY > 300) {
-            setScrollTopVisible(true);
-        } else {
-            setScrollTopVisible(false);
-        }
+        setScrollTopVisible(window.scrollY > 300);
     };
 
     const handleScroll = () => {
         const scrollPosition = window.scrollY + window.innerHeight;
         const documentHeight = document.body.offsetHeight;
-
-        if (scrollPosition >= documentHeight) {
-            setShowFooter(true);
-        } else {
-            setShowFooter(false);
-        }
+        setShowFooter(scrollPosition >= documentHeight);
     };
 
     const scrollToTop = () => {
@@ -64,25 +55,21 @@ export default function Inicio() {
             {scrollTopVisible && (
                 <button className="scroll-top" onClick={scrollToTop}>↑</button>
             )}
-            <div className="account-container">
-                <h2>Cuentas</h2>
-                {/* Tabla de cuentas vacía */}
-                <table className="account-table">
-                    <thead>
-                        <tr>
-                            <th>Número de Cuenta</th>
-                            <th>Tipo de Cuenta</th>
-                            <th>Saldo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {}
-                        <tr>
-                            <td colSpan="3" style={{ textAlign: 'center' }}>No hay datos disponibles</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <h2>Cuentas</h2>
+            <table className="account-table">
+                <thead>
+                    <tr>
+                        <th>Número de Cuenta</th>
+                        <th>Tipo de Cuenta</th>
+                        <th>Saldo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colSpan="3" style={{ textAlign: 'center' }}>No hay datos disponibles</td>
+                    </tr>
+                </tbody>
+            </table>
             {showFooter && (
                 <footer className="footer">
                     <img src={logocorto} alt="Logo Corto" className="footer-logo" />

@@ -1,6 +1,5 @@
 .login-container {
     display: flex;
-    background-color: rgb(242, 92, 5);
     flex-direction: column;
     height: 100vh;
     justify-content: space-between;
