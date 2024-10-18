@@ -1,0 +1,73 @@
+.prestamos-container {
+    padding: 20px;
+    color: #fff;
+}
+
+h2 {
+    color: rgb(242, 92, 5);
+    text-align: center;
+}
+
+.form-container {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-container input {
+    padding: 10px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+}
+
+.form-container button {
+    padding: 10px 20px;
+    background-color: rgb(242, 92, 5);
+    border: none;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-container button:hover {
+    background-color: rgb(255, 107, 10);
+}
+
+.prestamos-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.prestamos-table th,
+.prestamos-table td {
+    border: 1px solid #fff;
+    padding: 10px;
+    text-align: left;
+}
+
+.prestamos-table th {
+    background-color: #f9a825;
+}
+
+.prestamos-table tr:nth-child(even) {
+    background-color: #333;
+}
+
+.back-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: rgb(242, 92, 5);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: rgb(255, 107, 10);
+}
