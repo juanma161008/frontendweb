@@ -1,0 +1,25 @@
+body {
+    background-color: #222;
+    color: #fff;
+    font-family: sans-serif;
+}
+
+.reportes-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.back-button {
+    color: #fff; 
+    background-color: rgb(242, 92, 5); 
+    border: none; 
+    border-radius: 5px; 
+    padding: 10px 20px; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+    margin-top: 20px;
+}
+
+.back-button:hover {
+    background-color: rgb(255, 107, 10); 
+}

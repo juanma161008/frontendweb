@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importar useNavigate
+import { useNavigate } from 'react-router-dom'; 
 import './transacciones.css'; 
 
 export default function Transacciones() {
@@ -9,7 +9,7 @@ export default function Transacciones() {
         monto: '',
         fecha: '',
     });
-    const navigate = useNavigate(); // Inicializar useNavigate
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         const transaccionesIniciales = [
@@ -104,7 +104,6 @@ export default function Transacciones() {
                 </tbody>
             </table>
 
-            {/* Botón para volver al inicio */}
             <button className="volver-inicio" onClick={() => navigate('/inicio')}>
                 Volver al Inicio
             </button>
