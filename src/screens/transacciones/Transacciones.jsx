@@ -105,7 +105,7 @@ export default function Transacciones() {
             </table>
 
             {/* Botón para volver al inicio */}
-            <button className="volver-inicio" onClick={() => navigate('/')}>
+            <button className="volver-inicio" onClick={() => navigate('/inicio')}>
                 Volver al Inicio
             </button>
         </div>

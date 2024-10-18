@@ -103,7 +103,8 @@ export default function Prestamos() {
                     )}
                 </tbody>
             </table>
-            <button className="back-button" onClick={() => navigate('/')}>Volver al Inicio</button>
-        </div>
+            <button className="volver-inicio" onClick={() => navigate('/inicio')}>
+                Volver al Inicio
+            </button>        </div>
     );
 }
