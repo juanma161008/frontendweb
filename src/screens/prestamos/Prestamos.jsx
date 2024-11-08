@@ -8,6 +8,8 @@ export default function Prestamos() {
         descripcion: '',
         monto: '',
         fecha: '',
+        plazo: '',
+        estado: '',
     });
 
     const navigate = useNavigate();
@@ -48,9 +50,9 @@ export default function Prestamos() {
             });
 
             if (response.ok) {
-                const nuevo = await response.json(); // Recibir el préstamo creado desde el backend
+                const nuevo = await response.json();
                 setPrestamos([...prestamos, nuevo]);
-                setNuevoPrestamo({ descripcion: '', monto: '', fecha: '' });
+                setNuevoPrestamo({ descripcion: '', monto: '', fecha: '', plazo: '', estado: '' });
             } else {
                 console.error('Error al agregar préstamo');
             }
@@ -101,6 +103,13 @@ export default function Prestamos() {
                     value={nuevoPrestamo.fecha}
                     onChange={handleInputChange}
                 />
+                <input
+                    type="number"
+                    name="plazo"
+                    placeholder="Plazo del préstamo (en meses)"
+                    value={nuevoPrestamo.plazo}
+                    onChange={handleInputChange}
+                />
                 <button onClick={agregarPrestamo}>Agregar Préstamo</button>
             </div>
             <table className="prestamos-table">
@@ -110,6 +119,8 @@ export default function Prestamos() {
                         <th>Descripción</th>
                         <th>Monto</th>
                         <th>Fecha</th>
+                        <th>Plazo</th>
+                        <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -121,6 +132,8 @@ export default function Prestamos() {
                                 <td>{prestamo.descripcion}</td>
                                 <td>{prestamo.monto}</td>
                                 <td>{prestamo.fecha_solicitud}</td>
+                                <td>{prestamo.plazo}</td>
+                                <td>{prestamo.estado}</td>
                                 <td>
                                     <button onClick={() => eliminarPrestamo(prestamo.id_prestamo)}>
                                         Eliminar
@@ -130,7 +143,7 @@ export default function Prestamos() {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="5" style={{ textAlign: 'center' }}>No hay préstamos disponibles</td>
+                            <td colSpan="7" style={{ textAlign: 'center' }}>No hay préstamos disponibles</td>
                         </tr>
                     )}
                 </tbody>
