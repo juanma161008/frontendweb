@@ -5,19 +5,27 @@ import './transacciones.css';
 export default function Transacciones() {
     const [transacciones, setTransacciones] = useState([]);
     const [nuevaTransaccion, setNuevaTransaccion] = useState({
-        tipo: '',
+        tipo_transaccion: '',
         monto: '',
         fecha: '',
     });
     const navigate = useNavigate(); 
 
     useEffect(() => {
-        const transaccionesIniciales = [
-            { id: 1, tipo: 'Ingreso', monto: 1000, fecha: '2024-10-01' },
-            { id: 2, tipo: 'Egreso', monto: -500, fecha: '2024-10-05' },
-            { id: 3, tipo: 'Ingreso', monto: 200, fecha: '2024-10-10' },
-        ];
-        setTransacciones(transaccionesIniciales);
+        const obtenerTransacciones = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/transacciones');
+                if (response.ok) {
+                    const data = await response.json();
+                    setTransacciones(data);
+                } else {
+                    console.error('Error al cargar transacciones');
+                }
+            } catch (error) {
+                console.error('Error de red:', error);
+            }
+        };
+        obtenerTransacciones();
     }, []);
 
     const handleInputChange = (e) => {
@@ -28,20 +36,40 @@ export default function Transacciones() {
         });
     };
 
-    const agregarTransaccion = () => {
-        const nueva = {
-            id: transacciones.length + 1,
-            ...nuevaTransaccion,
-            monto: parseFloat(nuevaTransaccion.monto),
-            fecha: nuevaTransaccion.fecha,
-        };
-        setTransacciones([...transacciones, nueva]);
-        setNuevaTransaccion({ tipo: '', monto: '', fecha: '' });
+    const agregarTransaccion = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/transacciones', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(nuevaTransaccion),
+            });
+
+            if (response.ok) {
+                const nueva = await response.json();
+                setTransacciones([...transacciones, nueva]);
+                setNuevaTransaccion({ tipo_transaccion: '', monto: '', fecha: '' });
+            } else {
+                console.error('Error al agregar transacción');
+            }
+        } catch (error) {
+            console.error('Error de red:', error);
+        }
     };
 
-    const eliminarTransaccion = (id) => {
-        const nuevasTransacciones = transacciones.filter(t => t.id !== id);
-        setTransacciones(nuevasTransacciones);
+    const eliminarTransaccion = async (id_transaccion) => {
+        try {
+            const response = await fetch(`http://localhost:3000/transacciones/${id_transaccion}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                setTransacciones(transacciones.filter((transaccion) => transaccion.id_transaccion !== id_transaccion));
+            } else {
+                console.error('Error al eliminar transacción');
+            }
+        } catch (error) {
+            console.error('Error de red:', error);
+        }
     };
 
     return (
@@ -50,9 +78,9 @@ export default function Transacciones() {
             <div className="form-container">
                 <input
                     type="text"
-                    name="tipo"
+                    name="tipo_transaccion"
                     placeholder="Tipo (Ingreso/Egreso)"
-                    value={nuevaTransaccion.tipo}
+                    value={nuevaTransaccion.tipo_transaccion}
                     onChange={handleInputChange}
                 />
                 <input
@@ -84,13 +112,13 @@ export default function Transacciones() {
                 <tbody>
                     {transacciones.length > 0 ? (
                         transacciones.map((transaccion) => (
-                            <tr key={transaccion.id}>
-                                <td>{transaccion.id}</td>
-                                <td>{transaccion.tipo}</td>
+                            <tr key={transaccion.id_transaccion}>
+                                <td>{transaccion.id_transaccion}</td>
+                                <td>{transaccion.tipo_transaccion}</td>
                                 <td>{transaccion.monto}</td>
                                 <td>{transaccion.fecha}</td>
                                 <td>
-                                    <button onClick={() => eliminarTransaccion(transaccion.id)}>
+                                    <button onClick={() => eliminarTransaccion(transaccion.id_transaccion)}>
                                         Eliminar
                                     </button>
                                 </td>
