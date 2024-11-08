@@ -7,14 +7,12 @@ export default function Prestamos() {
     const [nuevoPrestamo, setNuevoPrestamo] = useState({
         descripcion: '',
         monto: '',
-        fecha: '',
         plazo: '',
         estado: '',
     });
 
     const navigate = useNavigate();
 
-    // Cargar préstamos desde el backend
     useEffect(() => {
         const obtenerPrestamos = async () => {
             try {
@@ -40,7 +38,6 @@ export default function Prestamos() {
         });
     };
 
-    // Agregar préstamo al backend
     const agregarPrestamo = async () => {
         try {
             const response = await fetch('http://localhost:3000/prestamos', {
@@ -52,7 +49,7 @@ export default function Prestamos() {
             if (response.ok) {
                 const nuevo = await response.json();
                 setPrestamos([...prestamos, nuevo]);
-                setNuevoPrestamo({ descripcion: '', monto: '', fecha: '', plazo: '', estado: '' });
+                setNuevoPrestamo({ descripcion: '', monto: '', plazo: '', estado: '' });
             } else {
                 console.error('Error al agregar préstamo');
             }
@@ -61,7 +58,6 @@ export default function Prestamos() {
         }
     };
 
-    // Eliminar préstamo del backend
     const eliminarPrestamo = async (id) => {
         try {
             const response = await fetch(`http://localhost:3000/prestamos/${id}`, {
@@ -97,13 +93,6 @@ export default function Prestamos() {
                     onChange={handleInputChange}
                 />
                 <input
-                    type="date"
-                    name="fecha"
-                    placeholder="Fecha del préstamo"
-                    value={nuevoPrestamo.fecha}
-                    onChange={handleInputChange}
-                />
-                <input
                     type="number"
                     name="plazo"
                     placeholder="Plazo del préstamo (en meses)"
@@ -118,7 +107,6 @@ export default function Prestamos() {
                         <th>ID</th>
                         <th>Descripción</th>
                         <th>Monto</th>
-                        <th>Fecha</th>
                         <th>Plazo</th>
                         <th>Estado</th>
                         <th>Acciones</th>
@@ -131,7 +119,6 @@ export default function Prestamos() {
                                 <td>{prestamo.id_prestamo}</td>
                                 <td>{prestamo.descripcion}</td>
                                 <td>{prestamo.monto}</td>
-                                <td>{prestamo.fecha_solicitud}</td>
                                 <td>{prestamo.plazo}</td>
                                 <td>{prestamo.estado}</td>
                                 <td>
