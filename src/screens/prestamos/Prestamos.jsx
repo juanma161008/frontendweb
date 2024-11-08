@@ -12,12 +12,22 @@ export default function Prestamos() {
 
     const navigate = useNavigate();
 
+    // Cargar préstamos desde el backend
     useEffect(() => {
-        const prestamosIniciales = [
-            { id: 1, descripcion: 'Préstamo Personal', monto: 5000, fecha: '2024-09-15' },
-            { id: 2, descripcion: 'Préstamo Hipotecario', monto: 20000, fecha: '2024-09-25' },
-        ];
-        setPrestamos(prestamosIniciales);
+        const obtenerPrestamos = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/prestamos');
+                if (response.ok) {
+                    const data = await response.json();
+                    setPrestamos(data);
+                } else {
+                    console.error('Error al cargar préstamos');
+                }
+            } catch (error) {
+                console.error('Error de red:', error);
+            }
+        };
+        obtenerPrestamos();
     }, []);
 
     const handleInputChange = (e) => {
@@ -28,20 +38,42 @@ export default function Prestamos() {
         });
     };
 
-    const agregarPrestamo = () => {
-        const nuevo = {
-            id: prestamos.length + 1,
-            ...nuevoPrestamo,
-            monto: parseFloat(nuevoPrestamo.monto),
-            fecha: nuevoPrestamo.fecha,
-        };
-        setPrestamos([...prestamos, nuevo]);
-        setNuevoPrestamo({ descripcion: '', monto: '', fecha: '' });
+    // Agregar préstamo al backend
+    const agregarPrestamo = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/prestamos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(nuevoPrestamo),
+            });
+
+            if (response.ok) {
+                const nuevo = await response.json(); // Recibir el préstamo creado desde el backend
+                setPrestamos([...prestamos, nuevo]);
+                setNuevoPrestamo({ descripcion: '', monto: '', fecha: '' });
+            } else {
+                console.error('Error al agregar préstamo');
+            }
+        } catch (error) {
+            console.error('Error de red:', error);
+        }
     };
 
-    const eliminarPrestamo = (id) => {
-        const nuevosPrestamos = prestamos.filter(p => p.id !== id);
-        setPrestamos(nuevosPrestamos);
+    // Eliminar préstamo del backend
+    const eliminarPrestamo = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:3000/prestamos/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                setPrestamos(prestamos.filter((prestamo) => prestamo.id_prestamo !== id));
+            } else {
+                console.error('Error al eliminar préstamo');
+            }
+        } catch (error) {
+            console.error('Error de red:', error);
+        }
     };
 
     return (
@@ -84,13 +116,13 @@ export default function Prestamos() {
                 <tbody>
                     {prestamos.length > 0 ? (
                         prestamos.map((prestamo) => (
-                            <tr key={prestamo.id}>
-                                <td>{prestamo.id}</td>
+                            <tr key={prestamo.id_prestamo}>
+                                <td>{prestamo.id_prestamo}</td>
                                 <td>{prestamo.descripcion}</td>
                                 <td>{prestamo.monto}</td>
-                                <td>{prestamo.fecha}</td>
+                                <td>{prestamo.fecha_solicitud}</td>
                                 <td>
-                                    <button onClick={() => eliminarPrestamo(prestamo.id)}>
+                                    <button onClick={() => eliminarPrestamo(prestamo.id_prestamo)}>
                                         Eliminar
                                     </button>
                                 </td>
@@ -105,6 +137,7 @@ export default function Prestamos() {
             </table>
             <button className="volver-inicio" onClick={() => navigate('/inicio')}>
                 Volver al Inicio
-            </button>        </div>
+            </button>
+        </div>
     );
 }

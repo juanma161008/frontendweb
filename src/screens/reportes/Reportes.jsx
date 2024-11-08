@@ -8,9 +8,7 @@ export default function Reportes() {
     return (
         <div className="reportes-container">
             <h2>Reportes</h2>
-            <p>Aquí puedes ver los reportes generados.</p>
-            
-            {/* Botón para volver al inicio */}
+            <p>Aquí puedes ver los reportes generados.</p>          
             <button className="back-button" onClick={() => navigate('/inicio')}>
                 Volver al Inicio
             </button>
