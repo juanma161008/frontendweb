@@ -1,13 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
-import logocorto from '../../assets/logocorto.png'; 
-import './Inicio.css'; 
+import logocorto from '../../assets/logocorto.png';
+import './Inicio.css';
 
 export default function Inicio() {
     const navigate = useNavigate();
+    const [usuarios, setUsuarios] = useState([]);
     const [scrollTopVisible, setScrollTopVisible] = useState(false);
     const [showFooter, setShowFooter] = useState(false);
+
+    useEffect(() => {
+        const fetchUsuarios = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/usuarios'); // Cambia la ruta si es necesario
+                const data = await response.json();
+                setUsuarios(data);
+            } catch (error) {
+                console.error("Error al obtener los usuarios:", error);
+            }
+        };
+        fetchUsuarios();
+    }, []);
 
     const toggleScrollTopButton = () => {
         setScrollTopVisible(window.scrollY > 300);
@@ -40,15 +54,9 @@ export default function Inicio() {
                         <img src={logo} alt="Logo" />
                     </div>
                     <ul className="menu">
-                        <li>
-                            <button onClick={() => navigate('/transacciones')}>Transacciones</button>
-                        </li>
-                        <li>
-                            <button onClick={() => navigate('/prestamos')}>Préstamos</button>
-                        </li>
-                        <li>
-                            <button onClick={() => navigate('/reportes')}>Reportes</button>
-                        </li>
+                        <li><button onClick={() => navigate('/transacciones')}>Transacciones</button></li>
+                        <li><button onClick={() => navigate('/prestamos')}>Préstamos</button></li>
+                        <li><button onClick={() => navigate('/reportes')}>Reportes</button></li>
                     </ul>
                 </div>
             </header>
@@ -65,9 +73,19 @@ export default function Inicio() {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td colSpan="3" style={{ textAlign: 'center' }}>No hay datos disponibles</td>
-                    </tr>
+                    {usuarios.length > 0 ? (
+                        usuarios.map((usuario) => (
+                            <tr key={usuario.numero_cuenta}>
+                                <td>{usuario.numero_cuenta}</td>
+                                <td>{usuario.tipo}</td>
+                                <td>{usuario.saldo}</td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="3" style={{ textAlign: 'center' }}>No hay datos disponibles</td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
             {showFooter && (
