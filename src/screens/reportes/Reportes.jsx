@@ -3,6 +3,7 @@ import './reportes.css';
 import { useNavigate } from 'react-router-dom';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import logo from "../../assets/logo.png";
 
 export default function Reportes() {
     const [reportes, setReportes] = useState([]);
@@ -36,12 +37,17 @@ export default function Reportes() {
             const pageHeight = pdf.internal.pageSize.height;
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-            pdf.setFontSize(16);
-            pdf.text("Estebanquito", 105, 20, null, null, 'center');
-            pdf.setFontSize(12);
-            pdf.text("Este es tu reporte financiero", 105, 30, null, null, 'center');
+            // Agrega el logo al PDF
+            const logoWidth = 40; 
+            const logoHeight = 20;
+            pdf.addImage(logo, 'PNG', 10, 10, logoWidth, logoHeight);
 
-            let position = 40; 
+            pdf.setFontSize(16);
+            pdf.text("Estebanquito", 105, 40, null, null, 'center');
+            pdf.setFontSize(12);
+            pdf.text("Este es tu reporte financiero", 105, 50, null, null, 'center');
+
+            let position = 60; 
             pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
 
             pdf.save("reporte_bancario.pdf");
