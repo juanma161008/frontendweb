@@ -32,14 +32,14 @@ export default function Reportes() {
         html2canvas(input, { scale: 2 }).then((canvas) => {
             const imgData = canvas.toDataURL('image/png');
             const pdf = new jsPDF('p', 'mm', 'a4');
-            const imgWidth = 190; // Ancho de la imagen en mm
+            const imgWidth = 190; 
             const pageHeight = pdf.internal.pageSize.height;
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
             pdf.setFontSize(16);
-            pdf.text("Estebanquito", 105, 20, null, null, 'center'); centro
+            pdf.text("Estebanquito", 105, 20, null, null, 'center');
             pdf.setFontSize(12);
-            pdf.text("Este es tu reporte financiero", 105, 30, null, null, 'center'); 
+            pdf.text("Este es tu reporte financiero", 105, 30, null, null, 'center');
 
             let position = 40; 
             pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
@@ -52,12 +52,29 @@ export default function Reportes() {
         <div className="reportes-container">
             <h2>Reporte de Estado Financiero</h2>
             <div id="reporte-pdf" style={{ padding: '20px', backgroundColor: '#fff', color: '#000' }}>
-                <h3>Resumen de Transacciones</h3>
+                {reportes.length > 0 && (
+                    <div>
+                        <h3>Estimado(a) {reportes[0].nombre},</h3>
+                        <p>
+                            Nos complace presentarle su reporte financiero detallado, el cual proporciona una visión completa de sus
+                            transacciones recientes y su situación actual en nuestra plataforma.
+                        </p>
+                        <h3>Resumen de Transacciones</h3>
+                        <p>
+                            Este informe incluye un desglose de sus transacciones en los últimos periodos, incluyendo el historial de ingresos y 
+                            egresos en sus cuentas. A continuación, encontrará una tabla detallada de sus operaciones financieras.
+                        </p>
+                    </div>
+                )}
                 <table className="reportes-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
                         <tr>
                             <th style={{ border: '1px solid #ddd', padding: '8px' }}>ID Reporte</th>
                             <th style={{ border: '1px solid #ddd', padding: '8px' }}>ID Usuario</th>
+                            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Nombre</th>
+                            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Email</th>
+                            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Número de Cuenta</th>
+                            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Tipo de Cuenta</th>
                             <th style={{ border: '1px solid #ddd', padding: '8px' }}>Histórico Ingreso</th>
                             <th style={{ border: '1px solid #ddd', padding: '8px' }}>Histórico Egresos</th>
                             <th style={{ border: '1px solid #ddd', padding: '8px' }}>Deudas</th>
@@ -69,6 +86,10 @@ export default function Reportes() {
                                 <tr key={reporte.id_reporte}>
                                     <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{reporte.id_reporte}</td>
                                     <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{reporte.id_usuario}</td>
+                                    <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{reporte.nombre}</td>
+                                    <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{reporte.email}</td>
+                                    <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{reporte.numero_cuenta}</td>
+                                    <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{reporte.tipo}</td>
                                     <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{reporte.historico_ingresos}</td>
                                     <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{reporte.historico_egresos}</td>
                                     <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{reporte.deudas}</td>
@@ -76,7 +97,7 @@ export default function Reportes() {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="5" style={{ textAlign: 'center' }}>No hay reportes disponibles</td>
+                                <td colSpan="9" style={{ textAlign: 'center' }}>No hay reportes disponibles</td>
                             </tr>
                         )}
                     </tbody>
