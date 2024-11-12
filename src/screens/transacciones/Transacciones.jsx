@@ -5,7 +5,6 @@ import './transacciones.css';
 export default function Transacciones() {
     const [transacciones, setTransacciones] = useState([]);
     const [nuevaTransaccion, setNuevaTransaccion] = useState({
-        tipo_transaccion: '',
         monto: '',
         fecha: '',
     });
@@ -47,25 +46,9 @@ export default function Transacciones() {
             if (response.ok) {
                 const nueva = await response.json();
                 setTransacciones([...transacciones, nueva]);
-                setNuevaTransaccion({ tipo_transaccion: '', monto: '', fecha: '' });
+                setNuevaTransaccion({ monto: '', fecha: '' });
             } else {
                 console.error('Error al agregar transacción');
-            }
-        } catch (error) {
-            console.error('Error de red:', error);
-        }
-    };
-
-    const eliminarTransaccion = async (id_transaccion) => {
-        try {
-            const response = await fetch(`http://localhost:3000/transacciones/${id_transaccion}`, {
-                method: 'DELETE',
-            });
-
-            if (response.ok) {
-                setTransacciones(transacciones.filter((transaccion) => transaccion.id_transaccion !== id_transaccion));
-            } else {
-                console.error('Error al eliminar transacción');
             }
         } catch (error) {
             console.error('Error de red:', error);
@@ -77,16 +60,9 @@ export default function Transacciones() {
             <h2>Transacciones</h2>
             <div className="form-container">
                 <input
-                    type="text"
-                    name="tipo_transaccion"
-                    placeholder="Tipo (Ingreso/Egreso)"
-                    value={nuevaTransaccion.tipo_transaccion}
-                    onChange={handleInputChange}
-                />
-                <input
                     type="number"
                     name="monto"
-                    placeholder="Monto"
+                    placeholder="Monto (positivo para depósito, negativo para retiro)"
                     value={nuevaTransaccion.monto}
                     onChange={handleInputChange}
                 />
@@ -106,7 +82,6 @@ export default function Transacciones() {
                         <th>Tipo</th>
                         <th>Monto</th>
                         <th>Fecha</th>
-                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -117,16 +92,11 @@ export default function Transacciones() {
                                 <td>{transaccion.tipo_transaccion}</td>
                                 <td>{transaccion.monto}</td>
                                 <td>{transaccion.fecha}</td>
-                                <td>
-                                    <button onClick={() => eliminarTransaccion(transaccion.id_transaccion)}>
-                                        Eliminar
-                                    </button>
-                                </td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="5" style={{ textAlign: 'center' }}>No hay transacciones disponibles</td>
+                            <td colSpan="4" style={{ textAlign: 'center' }}>No hay transacciones disponibles</td>
                         </tr>
                     )}
                 </tbody>
