@@ -10,7 +10,7 @@ export default function Prestamos() {
         plazo: '',
         estado: '',
     });
-
+    const [mensajeExito, setMensajeExito] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -39,6 +39,11 @@ export default function Prestamos() {
     };
 
     const agregarPrestamo = async () => {
+        if (!nuevoPrestamo.descripcion || !nuevoPrestamo.monto || !nuevoPrestamo.plazo) {
+            alert("Por favor, completa todos los campos.");
+            return;
+        }
+        
         try {
             const response = await fetch('http://localhost:3000/prestamos', {
                 method: 'POST',
@@ -48,35 +53,24 @@ export default function Prestamos() {
 
             if (response.ok) {
                 const nuevo = await response.json();
-                setPrestamos([...prestamos, nuevo]);
-                setNuevoPrestamo({ descripcion: '', monto: '', plazo: '', estado: '' });
+                setPrestamos([...prestamos, nuevo]); 
+                setNuevoPrestamo({ descripcion: '', monto: '', plazo: '', estado: '' });     
+                setMensajeExito("Préstamo solicitado exitosamente!");
+                setTimeout(() => setMensajeExito(''), 3000);
             } else {
-                console.error('Error al agregar préstamo');
+                console.error('Error al solicitar préstamo');
             }
         } catch (error) {
             console.error('Error de red:', error);
         }
     };
-
-    const eliminarPrestamo = async (id) => {
-        try {
-            const response = await fetch(`http://localhost:3000/prestamos/${id}`, {
-                method: 'DELETE',
-            });
-
-            if (response.ok) {
-                setPrestamos(prestamos.filter((prestamo) => prestamo.id_prestamo !== id));
-            } else {
-                console.error('Error al eliminar préstamo');
-            }
-        } catch (error) {
-            console.error('Error de red:', error);
-        }
-    };
-
+    
     return (
         <div className="prestamos-container">
             <h2>Préstamos</h2>
+            
+            {mensajeExito && <div className="mensaje-exito">{mensajeExito}</div>}
+            
             <div className="form-container">
                 <input
                     type="text"
@@ -99,8 +93,9 @@ export default function Prestamos() {
                     value={nuevoPrestamo.plazo}
                     onChange={handleInputChange}
                 />
-                <button onClick={agregarPrestamo}>Agregar Préstamo</button>
+                <button onClick={agregarPrestamo}>Solicitar Préstamo</button>
             </div>
+
             <table className="prestamos-table">
                 <thead>
                     <tr>
@@ -109,7 +104,6 @@ export default function Prestamos() {
                         <th>Monto</th>
                         <th>Plazo</th>
                         <th>Estado</th>
-                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -121,20 +115,16 @@ export default function Prestamos() {
                                 <td>{prestamo.monto}</td>
                                 <td>{prestamo.plazo}</td>
                                 <td>{prestamo.estado}</td>
-                                <td>
-                                    <button onClick={() => eliminarPrestamo(prestamo.id_prestamo)}>
-                                        Eliminar
-                                    </button>
-                                </td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="7" style={{ textAlign: 'center' }}>No hay préstamos disponibles</td>
+                            <td colSpan="5" style={{ textAlign: 'center' }}>No hay préstamos disponibles</td>
                         </tr>
                     )}
                 </tbody>
             </table>
+            
             <button className="volver-inicio" onClick={() => navigate('/inicio')}>
                 Volver al Inicio
             </button>
