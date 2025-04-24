@@ -1,8 +1,7 @@
-// screens/login/Login.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logo from '../../assets/logo.png'; 
-import logocorto from '../../assets/logocorto.png'; 
+import logo from '../../assets/logo.png';
+import logocorto from '../../assets/logocorto.png';
 import './Login.css';
 
 function Login() {
@@ -13,24 +12,25 @@ function Login() {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch('http://localhost:3000/login', { // Cambiado al endpoint /login
+            const response = await fetch('http://localhost:3000/usuarios/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, contrasena }), // Cuerpo con los campos email y contrasena
+                body: JSON.stringify({ email, contrasena }),
             });
-    
+
             const data = await response.json();
-    
+
             if (response.ok) {
-                // Si la respuesta es exitosa, redirige al usuario
+                // ✅ Guardar directamente los datos del usuario desde la respuesta
+                localStorage.setItem('usuario', JSON.stringify(data.user));
                 navigate('/Inicio');
             } else {
-                // Si las credenciales son incorrectas, muestra un error
                 setError(data.message || 'Credenciales incorrectas');
             }
         } catch (error) {
+            console.error(error);
             setError('Hubo un problema con la conexión');
         }
     };
@@ -48,13 +48,13 @@ function Login() {
                             type="text"
                             placeholder="Email"
                             value={email}
-                            onChange={(e) => setUsuario(e.target.value)} // Cambié "setUsuario" para claridad
+                            onChange={(e) => setUsuario(e.target.value)}
                         />
                         <input
                             type="password"
                             placeholder="Contraseña"
                             value={contrasena}
-                            onChange={(e) => setPassword(e.target.value)} // Cambié "setPassword" para claridad
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                         {error && <p className="error-message">{error}</p>}
                         <button className="button" onClick={handleLogin}>Iniciar sesión</button>

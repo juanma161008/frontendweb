@@ -6,21 +6,15 @@ import './Inicio.css';
 
 export default function Inicio() {
     const navigate = useNavigate();
-    const [usuarios, setUsuarios] = useState([]);
+    const [usuario, setUsuario] = useState(null);
     const [scrollTopVisible, setScrollTopVisible] = useState(false);
     const [showFooter, setShowFooter] = useState(false);
 
     useEffect(() => {
-        const fetchUsuarios = async () => {
-            try {
-                const response = await fetch('http://localhost:3000/usuarios'); // Cambia la ruta si es necesario
-                const data = await response.json();
-                setUsuarios(data);
-            } catch (error) {
-                console.error("Error al obtener los usuarios:", error);
-            }
-        };
-        fetchUsuarios();
+        const storedUser = localStorage.getItem('usuario');
+        if (storedUser) {
+            setUsuario(JSON.parse(storedUser));
+        }
     }, []);
 
     const toggleScrollTopButton = () => {
@@ -54,15 +48,18 @@ export default function Inicio() {
                         <img src={logo} alt="Logo" />
                     </div>
                     <ul className="menu">
+                    <p className="bienvenida-texto">Bienvenido, {usuario?.nombre}</p>
                         <li><button onClick={() => navigate('/transacciones')}>Transacciones</button></li>
                         <li><button onClick={() => navigate('/prestamos')}>Préstamos</button></li>
                         <li><button onClick={() => navigate('/reportes')}>Reportes</button></li>
                     </ul>
                 </div>
             </header>
+
             {scrollTopVisible && (
                 <button className="scroll-top" onClick={scrollToTop}>↑</button>
             )}
+
             <h2>Cuentas</h2>
             <table className="account-table">
                 <thead>
@@ -73,14 +70,12 @@ export default function Inicio() {
                     </tr>
                 </thead>
                 <tbody>
-                    {usuarios.length > 0 ? (
-                        usuarios.map((usuario) => (
-                            <tr key={usuario.numero_cuenta}>
-                                <td>{usuario.numero_cuenta}</td>
-                                <td>{usuario.tipo}</td>
-                                <td>{usuario.saldo}</td>
-                            </tr>
-                        ))
+                    {usuario ? (
+                        <tr>
+                            <td>{usuario.numero_cuenta}</td>
+                            <td>{usuario.tipo}</td>
+                            <td>{usuario.saldo}</td>
+                        </tr>
                     ) : (
                         <tr>
                             <td colSpan="3" style={{ textAlign: 'center' }}>No hay datos disponibles</td>
@@ -88,6 +83,7 @@ export default function Inicio() {
                     )}
                 </tbody>
             </table>
+
             {showFooter && (
                 <footer className="footer">
                     <img src={logocorto} alt="Logo Corto" className="footer-logo" />
