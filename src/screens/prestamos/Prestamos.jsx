@@ -46,40 +46,58 @@ export default function Prestamos() {
         setNuevoPrestamo(prev => ({ ...prev, [name]: value }));
     };
 
-    // Solicita un nuevo préstamo
+    // Solicita un nuevo préstamo (versión mejorada)
     const agregarPrestamo = async () => {
-        const { descripcion, monto, plazo } = nuevoPrestamo;
-        if (!descripcion || !monto || !plazo) {
-            alert("Por favor, completa todos los campos.");
+        // Validaciones frontend
+        if (!nuevoPrestamo.descripcion.trim()) {
+            alert("Por favor ingrese una descripción");
             return;
         }
-
+        if (isNaN(nuevoPrestamo.monto)) {
+            alert("El monto debe ser un número válido");
+            return;
+        }
+        if (isNaN(nuevoPrestamo.plazo)) {
+            alert("El plazo debe ser un número válido");
+            return;
+        }
+        if (parseFloat(nuevoPrestamo.monto) <= 0) {
+            alert("El monto debe ser mayor a 0");
+            return;
+        }
+        if (parseInt(nuevoPrestamo.plazo) <= 0) {
+            alert("El plazo debe ser mayor a 0 meses");
+            return;
+        }
+    
         try {
             const response = await fetch('http://localhost:3000/prestamos/crear', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     id_usuario: usuario.id_usuario,
-                    descripcion,
-                    monto,
-                    plazo,
+                    descripcion: nuevoPrestamo.descripcion.trim(),
+                    monto: parseFloat(nuevoPrestamo.monto),
+                    plazo: parseInt(nuevoPrestamo.plazo)
                 }),
             });
-
-            if (response.ok) {
-                const creado = await response.json();
-                setPrestamos(prev => [...prev, creado]);
-                setNuevoPrestamo({ descripcion: '', monto: '', plazo: '' });
-                setMensajeExito("Préstamo solicitado exitosamente!");
-                setTimeout(() => setMensajeExito(''), 3000);
-            } else {
-                console.error('Error al solicitar préstamo');
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error al solicitar préstamo');
             }
+    
+            const data = await response.json();
+            setPrestamos(data);
+            setNuevoPrestamo({ descripcion: '', monto: '', plazo: '' });
+            setMensajeExito("¡Préstamo solicitado con éxito!");
+            setTimeout(() => setMensajeExito(''), 3000);
+    
         } catch (error) {
-            console.error('Error de red:', error);
+            console.error("Error al solicitar préstamo:", error);
+            alert(`Error: ${error.message || 'No se pudo completar la solicitud'}`);
         }
     };
-
     return (
         <div className="prestamos-container">
             <h2>Préstamos</h2>
@@ -119,6 +137,7 @@ export default function Prestamos() {
                         <th>Monto</th>
                         <th>Plazo</th>
                         <th>Estado</th>
+                        <th>Fecha de Solicitud</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -130,6 +149,7 @@ export default function Prestamos() {
                                 <td>{p.monto}</td>
                                 <td>{p.plazo}</td>
                                 <td>{p.estado}</td>
+                                <td>{new Date(p.fecha_solicitud).toLocaleDateString()}</td>
                             </tr>
                         ))
                     ) : (
