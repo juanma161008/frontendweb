@@ -48,13 +48,18 @@ export default function Inicio() {
                         <img src={logo} alt="Logo" />
                     </div>
                     <ul className="menu">
-                    <p className="bienvenida-texto">Bienvenido, {usuario?.nombre}</p>
                         <li><button onClick={() => navigate('/transacciones')}>Transacciones</button></li>
                         <li><button onClick={() => navigate('/prestamos')}>Préstamos</button></li>
                         <li><button onClick={() => navigate('/reportes')}>Reportes</button></li>
                     </ul>
                 </div>
             </header>
+
+            {usuario && (
+                <div className="bienvenida-centrada">
+                    <h2>Bienvenido, {usuario.nombre}</h2>
+                </div>
+            )}
 
             {scrollTopVisible && (
                 <button className="scroll-top" onClick={scrollToTop}>↑</button>

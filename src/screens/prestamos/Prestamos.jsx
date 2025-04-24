@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Prestamos.css'; 
+import './Prestamos.css';
 import { useNavigate } from 'react-router-dom';
 
 export default function Prestamos() {
@@ -8,15 +8,25 @@ export default function Prestamos() {
         descripcion: '',
         monto: '',
         plazo: '',
-        estado: '',
     });
     const [mensajeExito, setMensajeExito] = useState('');
     const navigate = useNavigate();
 
+    // Recupera el usuario autenticado (guardado en el login)
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+
+    // Al montar, carga sólo los préstamos de este usuario
     useEffect(() => {
         const obtenerPrestamos = async () => {
+            if (!usuario?.id_usuario) return;
+
             try {
-                const response = await fetch('http://localhost:3000/prestamos');
+                const response = await fetch('http://localhost:3000/prestamos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id_usuario: usuario.id_usuario }),
+                });
+
                 if (response.ok) {
                     const data = await response.json();
                     setPrestamos(data);
@@ -28,33 +38,38 @@ export default function Prestamos() {
             }
         };
         obtenerPrestamos();
-    }, []);
+    }, [usuario]);
 
+    // Maneja cambios en el formulario
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setNuevoPrestamo({
-            ...nuevoPrestamo,
-            [name]: value,
-        });
+        setNuevoPrestamo(prev => ({ ...prev, [name]: value }));
     };
 
+    // Solicita un nuevo préstamo
     const agregarPrestamo = async () => {
-        if (!nuevoPrestamo.descripcion || !nuevoPrestamo.monto || !nuevoPrestamo.plazo) {
+        const { descripcion, monto, plazo } = nuevoPrestamo;
+        if (!descripcion || !monto || !plazo) {
             alert("Por favor, completa todos los campos.");
             return;
         }
-        
+
         try {
-            const response = await fetch('http://localhost:3000/prestamos', {
+            const response = await fetch('http://localhost:3000/prestamos/crear', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(nuevoPrestamo),
+                body: JSON.stringify({
+                    id_usuario: usuario.id_usuario,
+                    descripcion,
+                    monto,
+                    plazo,
+                }),
             });
 
             if (response.ok) {
-                const nuevo = await response.json();
-                setPrestamos([...prestamos, nuevo]); 
-                setNuevoPrestamo({ descripcion: '', monto: '', plazo: '', estado: '' });     
+                const creado = await response.json();
+                setPrestamos(prev => [...prev, creado]);
+                setNuevoPrestamo({ descripcion: '', monto: '', plazo: '' });
                 setMensajeExito("Préstamo solicitado exitosamente!");
                 setTimeout(() => setMensajeExito(''), 3000);
             } else {
@@ -64,13 +79,13 @@ export default function Prestamos() {
             console.error('Error de red:', error);
         }
     };
-    
+
     return (
         <div className="prestamos-container">
             <h2>Préstamos</h2>
-            
+
             {mensajeExito && <div className="mensaje-exito">{mensajeExito}</div>}
-            
+
             <div className="form-container">
                 <input
                     type="text"
@@ -108,23 +123,25 @@ export default function Prestamos() {
                 </thead>
                 <tbody>
                     {prestamos.length > 0 ? (
-                        prestamos.map((prestamo) => (
-                            <tr key={prestamo.id_prestamo}>
-                                <td>{prestamo.id_prestamo}</td>
-                                <td>{prestamo.descripcion}</td>
-                                <td>{prestamo.monto}</td>
-                                <td>{prestamo.plazo}</td>
-                                <td>{prestamo.estado}</td>
+                        prestamos.map(p => (
+                            <tr key={p.id_prestamo}>
+                                <td>{p.id_prestamo}</td>
+                                <td>{p.descripcion}</td>
+                                <td>{p.monto}</td>
+                                <td>{p.plazo}</td>
+                                <td>{p.estado}</td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="5" style={{ textAlign: 'center' }}>No hay préstamos disponibles</td>
+                            <td colSpan="5" style={{ textAlign: 'center' }}>
+                                No hay préstamos disponibles
+                            </td>
                         </tr>
                     )}
                 </tbody>
             </table>
-            
+
             <button className="volver-inicio" onClick={() => navigate('/inicio')}>
                 Volver al Inicio
             </button>

@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; 
-import './transacciones.css'; 
+import { useNavigate } from 'react-router-dom';
+import './transacciones.css';
 
 export default function Transacciones() {
     const [transacciones, setTransacciones] = useState([]);
-    const [nuevaTransaccion, setNuevaTransaccion] = useState({
-        monto: '',
-        fecha: '',
-    });
-    const navigate = useNavigate(); 
+    const [nuevaTransaccion, setNuevaTransaccion] = useState({ monto: '', fecha: '' });
+    const navigate = useNavigate();
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
 
     useEffect(() => {
         const obtenerTransacciones = async () => {
             try {
-                const response = await fetch('http://localhost:3000/transacciones');
+                const response = await fetch('http://localhost:3000/transacciones/usuario', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id_usuario: usuario.id_usuario }),
+                });
+
                 if (response.ok) {
                     const data = await response.json();
                     setTransacciones(data);
@@ -24,8 +27,11 @@ export default function Transacciones() {
                 console.error('Error de red:', error);
             }
         };
-        obtenerTransacciones();
-    }, []);
+
+        if (usuario) {
+            obtenerTransacciones();
+        }
+    }, [usuario]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -40,7 +46,10 @@ export default function Transacciones() {
             const response = await fetch('http://localhost:3000/transacciones', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(nuevaTransaccion),
+                body: JSON.stringify({
+                    ...nuevaTransaccion,
+                    id_usuario: usuario.id_usuario,
+                }),
             });
 
             if (response.ok) {
@@ -91,7 +100,7 @@ export default function Transacciones() {
                                 <td>{transaccion.id_transaccion}</td>
                                 <td>{transaccion.tipo_transaccion}</td>
                                 <td>{transaccion.monto}</td>
-                                <td>{transaccion.fecha}</td>
+                                <td>{new Date(transaccion.fecha).toLocaleDateString()}</td>
                             </tr>
                         ))
                     ) : (
