@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Prestamos.css';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Prestamos() {
   const [prestamos, setPrestamos] = useState([]);
@@ -18,15 +19,13 @@ export default function Prestamos() {
       if (!usuario?.id_usuario) return;
 
       try {
-        const response = await fetch('http://localhost:3000/prestamos', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id_usuario: usuario.id_usuario }),
+        // Usamos axios para hacer la petición GET
+        const response = await axios.post('http://localhost:3000/prestamos', {
+          id_usuario: usuario.id_usuario,
         });
 
-        if (response.ok) {
-          const data = await response.json();
-          setPrestamos(data);
+        if (response.status === 200) {
+          setPrestamos(response.data);
         } else {
           console.error('Error al cargar préstamos');
         }
@@ -52,27 +51,24 @@ export default function Prestamos() {
     }
 
     try {
-      const response = await fetch('http://localhost:3000/prestamos/crear', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id_usuario: usuario.id_usuario,
-          descripcion: descripcion.trim(),
-          monto: parseFloat(monto),
-          plazo: parseInt(plazo),
-        }),
+      // Usamos axios para hacer la petición POST
+      const response = await axios.post('http://localhost:3000/prestamos/crear', {
+        id_usuario: usuario.id_usuario,
+        descripcion: descripcion.trim(),
+        monto: parseFloat(monto),
+        plazo: parseInt(plazo),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
+      if (response.status === 200) {
+        const nuevo = response.data;
+        setPrestamos(prev => [...prev, nuevo]); // ✅ Agrega sin sobrescribir
+        setNuevoPrestamo({ descripcion: '', monto: '', plazo: '' });
+        setMensajeExito("¡Préstamo solicitado con éxito!");
+        setTimeout(() => setMensajeExito(''), 3000);
+      } else {
+        const errorData = await response.data;
         throw new Error(errorData.message || 'Error al crear el préstamo');
       }
-
-      const nuevo = await response.json();
-      setPrestamos(prev => [...prev, nuevo]); // ✅ Agrega sin sobrescribir
-      setNuevoPrestamo({ descripcion: '', monto: '', plazo: '' });
-      setMensajeExito("¡Préstamo solicitado con éxito!");
-      setTimeout(() => setMensajeExito(''), 3000);
 
     } catch (error) {
       console.error("Error al solicitar préstamo:", error);

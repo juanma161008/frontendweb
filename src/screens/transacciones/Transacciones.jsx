@@ -4,7 +4,7 @@ import './transacciones.css';
 
 export default function Transacciones() {
     const [transacciones, setTransacciones] = useState([]);
-    const [nuevaTransaccion, setNuevaTransaccion] = useState({ monto: '', fecha: '' });
+    const [nuevaTransaccion, setNuevaTransaccion] = useState({ monto: '', fecha: '', tipo_transaccion: '' });
     const navigate = useNavigate();
     const usuario = JSON.parse(localStorage.getItem('usuario'));
 
@@ -55,7 +55,7 @@ export default function Transacciones() {
             if (response.ok) {
                 const nueva = await response.json();
                 setTransacciones([...transacciones, nueva]);
-                setNuevaTransaccion({ monto: '', fecha: '' });
+                setNuevaTransaccion({ monto: '', fecha: '', tipo_transaccion: '' });
             } else {
                 console.error('Error al agregar transacción');
             }
@@ -82,8 +82,18 @@ export default function Transacciones() {
                     value={nuevaTransaccion.fecha}
                     onChange={handleInputChange}
                 />
+                <select
+                    name="tipo_transaccion"
+                    value={nuevaTransaccion.tipo_transaccion}
+                    onChange={handleInputChange}
+                >
+                    <option value="">Seleccionar tipo</option>
+                    <option value="deposito">Depósito</option>
+                    <option value="retiro">Retiro</option>
+                </select>
                 <button onClick={agregarTransaccion}>Agregar Transacción</button>
             </div>
+
             <table className="transacciones-table">
                 <thead>
                     <tr>
